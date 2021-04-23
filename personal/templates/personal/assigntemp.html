@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+{% load staticfiles %}
+<link rel='stylesheet' href ="{% static 'personal/css/bootstrap.min.css' %}" type='text/css'/>
+<link rel='stylesheet' href ="{% static 'personal/css/timeline.css' %}" type='text/css'/>
+</head>
+<body>
+
+ <div class="box box-primary">
+                <div class="box-header">
+                  <i class="ion ion-clipboard"></i>
+                  <h3 class="box-title">Import Template</h3>
+
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                
+                    <li>
+                      <span class="handle">
+                        <i class="fa fa-ellipsis-v"></i>
+                        <i class="fa fa-ellipsis-v"></i>
+                      </span>
+                      <span class="text">test here</span>
+                      <small class="label label-danger"><i class="fa fa-clock-o"></i> 2 mins</small> &nbsp; <a href=""><i class="glyphicon glyphicon-eye-open"></i></a> &nbsp; &nbsp;<a href=""><i class="fa fa-edit"></i></a>
+                      </li>{% for o in listed %}
+ccc
+                      {{forloop.counter}}&nbsp; &nbsp;{{o.title_line}}
+                    {% endfor %}
+                </div>
+
+              </div>                    
+</body>
+</html>
+

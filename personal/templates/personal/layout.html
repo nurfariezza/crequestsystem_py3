@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Change Request System</title>
+    {% load staticfiles %}
+
+    <!-- Bootstrap Core CSS -->
+    <link rel='stylesheet' href="{% static 'personal/css/bootstrap.min.css' %}" type='text/css' />
+
+    <!-- MetisMenu CSS -->
+    <link href="{% static 'personal/css/lib/metisMenu/dist/metisMenu.min.css' %}" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link href="{% static 'personal/css/sb-admin-2.css' %}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{% static 'personal/css/lib/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css" />
+
+    <link href="{% static 'personal/css/select2.min.css' %}" rel="stylesheet" type="text/css" />
+
+    <link rel='stylesheet' href="{% static 'personal/css/app.css' %}" type='text/css' />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery -->
+    <script src="{% static 'personal/css/lib/jquery/dist/jquery.min.js' %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'personal/css/lib/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{% static 'personal/css/lib/metisMenu/dist/metisMenu.min.js' %}"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="{% static 'personal/js/sb-admin-2.js' %}"></script>
+
+    <script src="{% static 'personal/js/select2.min.js' %}"></script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                   <span class="sr-only">Toggle navigation</span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+               </button>
+                <a class="navbar-brand"><img src="{% static 'personal/images/redtone.png' %}" width="150" height="45"></a>
+            </div>
+            <!-- /.navbar-header -->
+            <BR>
+            <ul class="nav navbar-top-links navbar-right">
+
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i>  {{user.email}} </a>
+                        </li>
+                        <!-- <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li> -->
+                        <li class="divider"></li>
+                        <li><a href="{% url 'logoff' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="{% url 'home' %}"><i class="fa fa-dashboard fa-fw"></i> Home</a>
+                        </li>
+
+                       
+                            <ul class="treeview-menu">
+                                <br>
+                                <li><a href={% url 'create' %}><i class="fa fa-edit fa-fw"></i> Create Request</a></li>
+                                <br>
+                                <li><a href={% url 'list' %}><i class="fa fa-th-list fa-fw"></i> Request List</a></li>
+                                <br>
+                            </ul>
+                       
+                        {% if request.user.dept == "rnd" %}
+                       
+                            <ul class="treeview-menu">
+                                <br>
+                                <li><a href={% url 'tempcreate' %}><i class="fa fa-newspaper-o"></i> Create Template</a></li>
+                                <br>
+                                <li><a href={% url 'templist' %}><i class="fa fa-bars"></i> Template List</a></li>
+                            </ul>
+                        
+                        {% endif %} 
+
+
+                        {% if request.user.is_staff %}
+                         <br>
+                         <li>
+                            <a href="{% url 'admin:index' %}" target="_blank"><i class="fa fa-user"></i> Admin</a>
+                        </li>
+                            
+                       <li>
+                            <a href={% url 'createuser' %}><i class="fa fa-plus"></i> Add User</a>
+                        </li>
+                            
+                        
+                        {% endif %}
+
+
+                        <li>
+                            <a href="{% url 'logoff' %}"><i class="fa fa-power-off fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+        {% block content %}{% endblock %}
+    </div>
+    {% csrf_token %}
+</body>
+
+</html>

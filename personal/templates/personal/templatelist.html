@@ -1,0 +1,49 @@
+{% extends "personal/layout.html" %}
+{% block content %}
+{% load staticfiles %}
+
+<script src="{% static 'personal/js/lib/jquery.easing.js' %}"></script>
+<script src="{% static 'personal/js/lib/angular.min.js' %}"></script>
+<script src="{% static 'personal/js/lib/angular-route.min.js' %}"></script>
+<script src="{% static 'personal/js/lib/angular-animate.min.js' %}"></script>
+<script src="{% static 'personal/js/lib/angular-sanitize.min.js' %}"></script>
+<script src="{% static 'personal/js/lib/angular-messages.min.js' %}"></script>
+<script src="{% static 'personal/js/lib/angular-strap.min.js' %}"></script>
+<script src="{% static 'personal/js/lib/angular-strap.tpl.min.js' %}"></script>
+<script src="{% static 'personal/js/lib/ui-bootstrap-tpls-0.14.3.min.js' %}"></script>
+<script src="{% static 'personal/js/lib/ui-utils.min.js' %}"></script>
+<script src="{% static 'personal/js/lib/underscore-min.js' %}"></script>
+<script src="{% static 'personal/js/lib/bootbox.min.js' %}"></script>
+<script src="{% static 'personal/js/utils.js' %}"></script>
+<script src="{% static 'personal/js/route.js' %}"></script>
+<script src="{% static 'personal/js/app.js' %}"></script>
+<script src="{% static 'personal/js/filters.js' %}"></script>
+<script src="{% static 'personal/js/services.js' %}"></script>
+
+<div id="page-wrapper" ng-app="mvcapp">
+    <div class="container-fluid"><br> {% include "personal/_message.html" %}
+        <div class="panel panel-default" ng-controller="IndexCtrl">
+            <div class="panel-heading">
+                <i class="fa fa-bell fa-fw"></i> Template Panel
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                {% for o in listed %} 
+                 <div class="list-group">
+                    <a href="#" class="list-group-item" ng-click="showedittemplate({{o.id}})">
+                        <i class="fa fa-money fa-fw"></i> :: {{o.title_line}} for {{o.app.name}}<span class="pull-right text-muted small"><em>Created on {{o.reqdate}} <br></em> </span>
+                    </a>
+                </div>
+
+                {% endfor %} 
+
+
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+<script src="{% static 'personal/js/templatelist/controller.js' %}"></script>
+{% endblock %}

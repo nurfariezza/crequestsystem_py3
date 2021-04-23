@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Change Request</title>
+</head>
+<body>
+  
+
+    <p>New request from {{o.requser.username}} on {{o.reqdate|date:"F j, Y" }}</p>
+
+
+	<table border='1' cellspacing='0'>
+        <tr>
+            <th width="120" height="20">Requestor :</th>
+            <th width="400">{{o.requser.username}} ({{o.requser.email}})</th>
+        </tr>
+        <tr>
+            <th width="120" height="20">Application Requested :</th>
+            <th width="400">{{o.app.name}}</th>
+        </tr>
+        <tr>
+            <th width="120" height="20"> Task Title :</th>
+            <th width="400">{{o.title}}</th>
+        </tr>
+        <tr>
+            <th width="120" height="20"> Description :</th>
+            <th width="400"><pre>{{o.description}}</pre></th>
+        </tr>
+        <tr>
+            <th width="120" height="20">Status :</th>
+            <th width="400">{{o.reqstatusstr}}</th>
+        </tr>
+        <tr>
+            <th width="120" height="20">Remark :</th>
+            <th width="400">{{o.remark}}</th>
+        </tr>
+    </table>
+
+    <p>You can access the Change Request System via <a href="{{url}}{{o.id}}" target="_blank">Click Here</a></p>
+    <BR>
+
+    <p>From, Change Request System </p>
+</body>
+</html>

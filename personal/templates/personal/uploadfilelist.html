@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+{% load staticfiles %}
+<link rel='stylesheet' href ="{% static 'personal/css/bootstrap.min.css' %}" type='text/css'/>
+</head>
+<body>
+	<table class="table table-striped table-hover table-condensed">
+        {% for o in list %}
+            <tr>
+                <td><a href="{% url 'getuploadfile' %}?fn={{o}}&id={{id}}" target="_blank">{{o}}</a></td>
+                <!--<td><a href="{% url 'uploaddelete' %}?fn={{o}}&id={{id}}" class="close">&times;</a></td>-->
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

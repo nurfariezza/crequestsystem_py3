@@ -1,0 +1,107 @@
+{% extends "personal/layout.html" %}
+{% block content %}
+{% load staticfiles %}
+
+<div id="page-wrapper">
+    <div class="container-fluid"><br>
+        {% include "personal/_message.html" %}
+
+        <form class="form-horizontal" method="post" action="{% url 'search' %}"> 
+            {% csrf_token %}
+            <div class="form-group form-group-sm">
+                <div class="col-xs-9">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" name="keyword" placeholder="Search..." value="{{search.keyword}}" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+	{% if request.user.is_staff %}
+            <div class="form-group form-group-sm">
+                <div class="col-xs-5">
+                    <select name="status" class="form-control select2" multiple="multiple">
+                        <option value="0" {% if 0 in search.statuslist %}selected="selected"{% endif %}>Open</option>
+                        <option value="1" {% if 1 in search.statuslist %}selected="selected"{% endif %}>Approved</option>
+                        <option value="2" {% if 2 in search.statuslist %}selected="selected"{% endif %}>Reject</option>
+			             <option value="5" {% if 5 in search.statuslist %}selected="selected"{% endif %}>In Progress</option>
+                        <option value="6" {% if 6 in search.statuslist %}selected="selected"{% endif %}>Done</option>
+
+
+                    </select>
+                </div>
+                <div class="col-xs-3">
+                    
+                </div>
+            </div>
+ 	{%endif%}
+        </form>
+
+        <div class="row">
+            <div class="content table-responsive table-full-width">
+                <table class="table table-striped">
+                    <thead>
+                        
+                            <th>No.</th>
+                            <th>Req ID</th>
+                            <th>Title</th>
+                            <th>Apps</th>
+                            <th>Requestor</th>
+                            <th>Req Date</th>
+                            <th>Approver</th>
+                            <th>Status</th>
+                            <th>Verified</th>
+                            <!-- <th>Cancel</th>-->
+                        
+                    </thead>
+
+                    <tbody>
+                        {% for o in listed %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{o.id}}</td>
+                            <td>{{o.title_line}}</td>
+                            <td><a href="{% url 'edit' o.id %}">{{o.app.name}}</td></a>
+                            
+                            <td>{{o.requser.username}}</td>
+                            <td>{{o.reqdate}}</td>
+                            <td>{{o.approver.username}}</td>
+                            <td>{{o.reqstatusstr}}</td> 
+                            {% if o.verified == 1 %}
+                                <td><i class="fa fa-check-square-o"></i></td> 
+                             {% else %}
+                              <td><a href="{% url 'edit' o.id %}"><i class="fa fa-exclamation-triangle"></i></a></td> 
+                            {% endif %}
+                            <!--<td><a href="{% url 'edit' o.id %}"><p class="fa fa-edit"> </p></a></td>-->
+                            <!-- {% if o.reqstatus > 0 and o.requser.id == request.user.id  %}
+                            <td></td>
+                            {% else %}
+                            <td><a href="{% url 'cancelstatus' o.id %}" method="post" type="submit"><p class="fa fa-times-circle"> </p></a></td>
+                         {% endif %}-->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    
+                </table>
+
+                <ul class="pagination">
+                    <li><a href=""> TOTAL RECORD: [&nbsp; {{total}} &nbsp;]</a></li>
+                    {% for i in paging.page_range %}
+                    <li><a href="{% url 'list' %}?pagenum={{i}}">{{i}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>                       
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.select2').select2({
+        placeholder: "Select status"
+    });
+});
+</script>
+{% endblock %}

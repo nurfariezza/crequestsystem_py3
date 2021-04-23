@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>[Important] Auto Verified List From CR System</title>
+</head>
+<body>
+Hi Admin,
+   <p> List of task - been verified by Auto System. </p>
+
+	<table border='1' cellspacing='0'>
+        <thead>       
+                <th>No.</th>
+                <th>Req ID</th>
+                <th>Title</th>
+                <th>Apps</th>
+                <th>Requestor</th>
+                <th>Req Date</th>
+                <th>Status</th>
+                <th>Completed Date</th>
+            
+        </thead>
+
+        <tbody>
+            {% for o in listed %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{o.id}}</td>
+                <td>{{o.title_line}}</td>
+                <td>{{o.app.name}}</td>
+                
+                <td>{{o.requser.username}}</td>
+                <td>{{o.reqdate|date:"F j, Y" }}</td>
+                
+                <td>{{o.reqstatusstr}}</td> 
+                <td>{{o.completeddate}}</td>
+                
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+
+
+    <BR>
+
+    <p>Generated From, Change Request System </p>
+</body>
+</html>

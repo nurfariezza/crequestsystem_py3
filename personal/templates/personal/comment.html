@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+{% load staticfiles %}
+<link rel='stylesheet' href ="{% static 'personal/css/bootstrap.min.css' %}" type='text/css'/>
+<link rel='stylesheet' href ="{% static 'personal/css/timeline.css' %}" type='text/css'/>
+</head>
+<body>
+<div class="form-group form-group-sm">
+	
+    {% for o in list %}
+   
+         <ul class="timeline"><button type="button" class="glyphicon glyphicon-user"><i class="fa fa-check"></i>
+        </button>{{o.email}}
+            <li class="timeline-inverted">
+                <div class="timeline-panel">                    
+                    <div class="timeline-body">
+                        <p>{{o.comment}}</p>
+
+                        {{o.date}}
+                    </div>
+                </div>
+            </li>
+           </ul> 
+       
+    {% endfor %}
+           
+
+    </div>
+							
+</body>
+</html>

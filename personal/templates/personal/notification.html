@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Change Request</title>
+</head>
+<body>
+    <p>Dear {{o.assignto}},</p>     
+    <p>You have new task has been assigned to you on {{o.reqdate|date:"F j, Y"}}.</p>
+    <BR>
+    
+    <table border='1' cellspacing='0'>
+        <tr>
+            <th width="120" height="20">Application Requested: </th>
+            <th width="400">{{o.app.name}}</th>
+        </tr>
+        <tr>
+            <th width="120" height="20"> Task Title :</th>
+            <th width="400">{{o.title}}</th>
+        </tr>
+        <tr>
+            <th width="120" height="20"> Task Description :</th>
+            <th width="400">{{o.description}}</th>
+        </tr>
+    </table >
+   
+    <p>You can access the Request Form System via <a href="{{url}}{{o.id}}">Click Here</a></p>
+    <BR>
+    <p>From, Change Request System </p>
+</body>
+</html>

@@ -1,0 +1,172 @@
+{% extends "personal/layout.html" %}
+
+{% block content %}
+{% load staticfiles %}
+  {% if user.is_authenticated %}
+<!-- Page Content -->
+<div id="page-wrapper">
+    <div class="row"> <BR><BR>
+        <div class="col-lg-12">
+           
+    
+
+    <p>Use the navigation bar at the side of the page to get started.</p>
+  
+        <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-tasks fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{open}}</div>
+                                    <div>New Open Request!</div>
+                                </div>
+                            </div>
+                        </div>
+                      
+                            <div class="panel-footer">
+                               
+                                <div class="clearfix"></div>
+                            </div>
+                       
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-tasks fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge"> {{done}}</div>
+                                    <div>Request Closed/Done.</div>
+                                </div>
+                            </div>
+                        </div>
+                      
+                            <div class="panel-footer">
+                                
+                                <div class="clearfix"></div>
+                            </div>
+                        
+                    </div>
+                </div>
+</div>
+                 <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-check fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{rndapproved}}</div>
+                                    <div>Request Approved.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                            <div class="panel-footer">
+                                
+                                <div class="clearfix"></div>
+                            </div>
+                       
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-red">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-support fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">{{reject}}</div>
+                                    <div>Request Rejected</div>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="panel-footer">
+                             <div class="clearfix"></div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+                </div>
+            </div> 
+
+
+        
+		
+       <!-- <div class="col-lg-10">
+        <div class="panel panel-info">
+
+         <div class="panel-heading"> Issue Sort</div>
+         <div class="panel-body"> 
+                      
+            <div class="row" >
+            <div class="col-xs-12" style="height:350px;overflow-y:scroll;"></br>
+
+                <table class="table">
+
+                           
+                    <tbody>
+                        {% for o in list %}
+                        <tr>
+                            {%if o.reqstatus == 0%}
+                            <th><button type="button" class="btn btn-info btn-circle"><i class="fa fa-list"></i>
+                            </button></th>
+                            {%elif o.reqstatus == 1%}
+                            <th> <button type="button" class="btn btn-success btn-circle"><i class="fa fa-minus"></i>
+                            </button></th>
+                            {%elif o.reqstatus == 2%}
+                            <th><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-times"></i>
+                            </button></th>
+                            {%elif o.reqstatus == 4%}
+                            <th><button type="button" class="btn btn-warning btn-circle"><i class="fa fa-minus"></i>
+                            </button></th>
+                            {%elif o.reqstatus == 6%}
+                            <th><button type="button" class="btn btn-success btn-circle"><i class="fa fa-check"></i>
+                            </button></th>
+                            {%else%}
+                            <th><button type="button" class="btn btn-warning btn-circle"><i class="fa fa-minus"></i>
+                            </button></th>
+                            {% endif %}
+                            
+                       
+                            <td><a href="{% url 'edit' o.id %}">{{o.app.name}}</td>
+                            <td>{{o.reqstatusstr}}</td>   
+                            <td>({{o.requser.email}})</td></a>
+                            <td>{{o.reqdate}}</td>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>                       
+</div>-->
+                           
+       </div>
+       </div>
+</div>
+</div>
+
+
+
+	</div>
+</div>
+{% else %}
+
+  <p>Kindly check your login with Administrator.<p>
+
+  {% endif %}
+{% endblock %}

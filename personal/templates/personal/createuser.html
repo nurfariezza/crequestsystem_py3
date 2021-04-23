@@ -1,0 +1,85 @@
+{% extends "personal/layout.html" %}
+{% block content %}
+{% load staticfiles %}
+
+            
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        {% include "personal/_message.html" %}
+
+
+        <div class="row">
+            <div class="col-lg-12">
+
+                <h3 class="page-header"><i class="fa fa-user"></i></h3>
+            </div>
+
+
+            <div class="box box-info" >
+                
+                <form id= "userreq" class="form-horizontal" method="post" action="{% url 'createuser' %}">
+                
+
+                    {% csrf_token %}
+                    <div class="box-body">
+
+                        
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">User Name</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" placeholder="Username"  id="username"  name="username" value="{{model.title}}" />                                    
+                            </div>
+                       
+                        </div>
+                      
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Email Address</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" placeholder="Email Address"  id="email"  name="email" value="{{model.title}}" />                                    
+                            </div>
+                       
+                        </div>
+
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Department</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" placeholder="Department"  id="dept"  name="dept" value="{{model.title}}" />                                    
+                            </div>
+                       
+                        </div>
+                        <div class="form-group form-group-sm">
+                           
+                        <div class="col-xs-10 col-xs-offset-2">
+                            <input type="checkbox" id="is_staff" name="is_staff" {% if model.is_staff == 1 %} checked="checked" {% else %} model.is_staff == 0 {% endif %} value="1""> Staff  <input type="checkbox" name="is_approver" value="is_approver">Approver <br>                        
+                        </div>
+                            
+
+                        </div>
+
+                        <div class="col-xs-10 col-xs-offset-2">
+                        <button class="btn btn-success btn-submit" type="submit" ><i class="glyphicon glyphicon-floppy-save"></i>Add</button>
+                       
+                       
+                        <br>
+                    </div>
+                </div>
+                </form>
+
+                
+                </form>
+                </div>
+
+                </div>                
+
+                   
+               
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.select2').select2({
+        placeholder: "Assign To "
+    });
+});
+</script>
+{% endblock %}

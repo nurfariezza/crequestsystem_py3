@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Change Request</title>
+</head>
+<body>
+    <p>Dear {{o.requser.username}},</p>     
+    <p>Your request on {{o.reqdate|date:"F j, Y"}}. has been {{o.reqstatusstr}}.</p>
+    <p>You are required to do system verification according to your request requirement. </p>  
+
+    <table border='1' cellspacing='0'>
+        <tr>
+            <th width="120" height="20">Application Requested: </th>
+            <th width="400">{{o.app.name}}</th>
+        </tr>
+        <tr>
+            <th width="120" height="20"> Task Title :</th>
+            <th width="400">{{o.title}}</th>
+        </tr>
+        <tr>
+            <th width="120" height="20"> Task Description :</th>
+            <th width="400">{{o.description}}</th>
+        </tr>
+    </table >
+    <p></p>    
+    <p>Please verify your request by click this link. <a href="{{url}}{{o.id}}">Click Here</a></p>
+    
+    <p>From, </p>
+    </p>Change Request System </p>
+
+
+</body>
+</html>

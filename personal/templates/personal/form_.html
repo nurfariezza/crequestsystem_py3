@@ -1,0 +1,431 @@
+{% extends "personal/layout.html" %}
+{% block content %}
+{% load staticfiles %}
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        {% include "personal/_message.html" %}
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="page-header"></h3>
+            </div>
+
+            <div class="box box-info" >
+                {% if model.id > 0 %}
+                <form class="form-horizontal" method="post" action="{% url 'update' model.id %}">
+                {% else %}
+                <form id= "userreq" class="form-horizontal" method="post" action="{% url 'submit' %}">
+                {% endif %}
+                    <input type="hidden" value="{{model.id}}" />
+                    {% csrf_token %}
+                    <div class="box-body">
+                        {% if model.id > 0 %}
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Request ID:</label>
+                            <div class="col-xs-2">
+                                <input type="text" class="form-control" placeholder="Request ID"  id="reqid" readonly="true" name="reqid" value="{{ model.id|stringformat:"i" }}" />                                    
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Application Name</label>
+                            <div class="col-xs-4">
+                                {% if request.user.is_approver and model.id %}
+                                <p class="form-control-static">{{model.app.name}}</p>
+                                 {% elif request.user.is_approver == 0 and model.id %}
+                                <p class="form-control-static">{{model.app.name}}</p>
+                                {% else %}
+                                <select class="form-control" name="app">
+                                    {% for i in applist %}
+                                    <option value="{{i.id}}" {% if i.id == model.app.id %}selected="selected"{% endif %}>{{i.name}}</option>
+                                    {% endfor %}
+                                </select>
+                                {% endif %}
+                            </div>
+                            <label class="col-xs-2 control-label">Head Approver </label>
+                            <div class="col-xs-4">
+                                {% if request.user.is_approver and model.id%}
+                                <p class="form-control-static">{{model.approver.username}} ({{model.approver.email}})</p>
+                                 {% elif request.user.is_approver == 0 and model.id%}
+                                <p class="form-control-static">{{model.approver.username}} ({{model.approver.email}})</p>
+                                {% else %}
+                                <select class="form-control" name="approver">
+                                    <option value="">Please Select</option>
+                                    {% for i in apprvlist %}
+                                    <option value="{{i.id}}" {% if i.id == model.approver.id %}selected="selected"{% endif %}>{{i.username}} ({{i.email}})</option>
+                                    {% endfor %}
+                                </select>
+                                {% endif %}      
+                            </div>
+                        </div>
+
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Change Requestor</label> 
+                            {% if model.id > 0 %}
+                            <div class="col-xs-4">
+                                <p class="form-control-static">{{model.requser}}</p>
+                            </div>
+                             {% else %}
+                             <div class="col-xs-4">
+                                <p class="form-control-static">{{request.user.username}} ({{request.user.email}})</p>
+                            </div>
+                            {% endif %} 
+                        {% if model.reqstatus != 0 %}
+                         <label class="col-xs-2 control-label">RND Approver</label>
+                            <div class="col-xs-4">
+                                {% if request.user.is_approver and model.id %}
+                                <p class="form-control-static">mingching(mingching.tiew@redtone.com)</p>
+
+                                 {% elif request.user.is_approver == 0 and model.id %}
+                                <p class="form-control-static">mingching(mingching.tiew@redtone.com)</p>
+                                {% else %}
+                                <select class="form-control" name="approver">
+                                    <option value="">Please Select</option>
+                                    {% for i in apprvlist %}
+                                    <option value="{{i.id}}" {% if i.id == model.approver.id %}selected="selected"{% endif %}>{{i.username}} ({{i.email}})</option>
+                                    {% endfor %}
+                                </select>
+                                {% endif %}      
+                            </div>
+                            {% endif %}   
+                        </div>
+                          
+                        <div class="form-group form-group-sm">
+                         {% if request.user.is_approver and model.id and model.reqstatus == 4%}
+                         <label class="col-xs-2 control-label">Current Status</label>
+                            <div class="col-xs-4">
+                                <select class="form-control" name="reqstatus" value="{{model.reqstatus}}" disabled="disabled">
+                                <option {% if model.reqstatus == 0 %} selected="selected" {% endif %} value="0">{{model.reqstatusstr}}</option>
+                                
+                                </select>
+                            </div>
+                              
+                            {% endif %}
+
+                            <label class="col-xs-2 control-label">Status</label>
+                            <div class="col-xs-3">
+                                {% if request.user.is_approver and model.id and model.reqstatus == 4%}
+                                <select class="form-control" name="reqstatus" value="{{model.reqstatus}}" >
+                                    <option {% if model.reqstatus == 1 %} selected="selected" {% endif %} value="1">Approve</option>
+                                    <option {% if model.reqstatus == 2 %} selected="selected" {% endif %} value="2">Reject</option>
+                                    <option {% if model.reqstatus == 3 %} selected="selected" {% endif %} value="3">Cancel</option>
+                                          
+                                </select>
+                                {% elif request.user.is_approver and model.id and model.reqstatus == 0 %}
+                                <select class="form-control" name="reqstatus" value="{{model.reqstatus}}" >
+                                    <option {% if model.reqstatus == 4 %} selected="selected" {% endif %} value="4">Approve</option>
+                                    <option {% if model.reqstatus == 2 %} selected="selected" {% endif %} value="2">Reject</option>
+                                    <option {% if model.reqstatus == 3 %} selected="selected" {% endif %} value="3">Cancel</option>
+                                          
+                                </select>
+                               
+
+                                 {%elif request.user.is_approver and model.id and model.reqstatus == 1 %}
+                                 <select class="form-control" name="reqstatus" value="{{model.reqstatus}}" disabled="disabled">
+                                <option {% if model.reqstatus == 0 %} selected="selected" {% endif %} value="0">{{model.reqstatusstr}}</option>
+                                </select>
+                                 {%elif request.user.is_approver == 0 and model.id and model.reqstatus == 1 %}
+                                <select class="form-control" name="reqstatus" value="{{model.reqstatus}}" >
+
+                                    <option {% if model.reqstatus == 5 %} selected="selected" {% endif %} value="5">In Progress</option>
+                                    <option {% if model.reqstatus == 6 %} selected="selected" {% endif %} value="6">Fixed/Done</option>       
+                                </select>
+                                 {%elif request.user.is_approver == 0 and model.id and model.reqstatus == 5 %}
+                                <select class="form-control" name="reqstatus" value="{{model.reqstatus}}" >
+                                    
+                                    <option {% if model.reqstatus == 5 %} selected="selected" {% endif %} value="5">In Progress</option>
+                                    <option {% if model.reqstatus == 6 %} selected="selected" {% endif %} value="6">Fixed/Done</option>       
+                                </select>
+                                {% else %} 
+                                <select class="form-control" name="reqstatus" value="{{model.reqstatus}}" disabled="disabled">
+                                <option {% if model.reqstatus == 0 %} selected="selected" {% endif %} value="0">{{model.reqstatusstr}}</option>
+                                
+                                </select>
+                                {% endif %} 
+                            </div>
+                        </div>
+                       
+                        {% if request.user.is_approver and model.id and model.reqstatus == 0 %}
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Task Description</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description" name="description" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true">{{model.description}}</textarea>
+                            </div>
+                        </div>
+                         <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Head Remark </label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description1" name="description1" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" >{{model.description1}}</textarea>
+                            </div>
+                        </div>
+                        {%elif request.user.is_approver and model.id and model.reqstatus == 4 %}
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Task Description</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description" name="description" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true">{{model.description}}</textarea>
+                            </div>
+                        </div>
+                         <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Head Remark </label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description1" name="description1" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true" >{{model.description1}}</textarea>
+                            </div>
+                        </div>
+                         <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">RND Remark</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description2" name="description2" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" >{{model.description2}}</textarea>
+                            </div>
+                        </div>
+                        {%elif request.user.is_approver and model.id and model.reqstatus == 2 %}
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Task Description</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description" name="description" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true">{{model.description}}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Head Remark</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description1" name="description1" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true">{{model.description1}}</textarea>
+                            </div>
+                        </div>
+                         <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">RND Remark</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description2" name="description2" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true">{{model.description2}}</textarea>
+                            </div>
+                        </div>
+                         {%elif request.user.is_approver == 0 and model.id and model.reqstatus == 1 or model.id and model.reqstatus == 5 or model.reqstatus == 3 %}
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Task Description</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description" name="description" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true">{{model.description}}</textarea>
+                            </div>
+                        </div>
+                         <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Head Remark </label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description1" name="description1" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true" >{{model.description1}}</textarea>
+                            </div>
+                        </div>
+                         <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">RND Remark</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description2" name="description2" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true">{{model.description2}}</textarea>
+                            </div>
+                        </div>
+
+                        {%elif request.user.is_approver == 0 and model.id and model.reqstatus == 0 %}
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Task Description</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description" name="description" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" >{{model.description}}</textarea>
+                            </div>
+                        </div>
+                        
+                         {%elif request.user.is_approver == 0 and model.id and model.reqstatus == 4 %}
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Task Description</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description" name="description" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true"  >{{model.description}}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Head Remark </label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description1" name="description1" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true" >{{model.description1}}</textarea>
+                            </div>
+                        </div>
+                        {%elif request.user.is_approver and model.id and model.reqstatus == 1 or model.reqstatus == 5 or model.reqstatus == 2 or model.reqstatus == 3 %}
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Task Description</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description" name="description" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true">{{model.description}}</textarea>
+                            </div>
+                        </div>
+                         <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Head Remark </label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description1" name="description1" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true" >{{model.description1}}</textarea>
+                            </div>
+                        </div>
+                         <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">RND Remark</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description2" name="description2" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true">{{model.description2}}</textarea>
+                            </div>
+                        </div>
+
+                        {%elif request.user.is_approver and model.id and model.reqstatus > 5 %}
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Task Description</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description" name="description" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true">{{model.description}}</textarea>
+                            </div>
+                        </div>
+                         <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Head Remark </label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description1" name="description1" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true" >{{model.description1}}</textarea>
+                            </div>
+                        </div>
+                         <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">RND Remark</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description2" name="description2" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true">{{model.description2}}</textarea>
+                            </div>
+                        </div>
+                         {%elif request.user.is_approver == 0 and model.id and model.reqstatus > 5 %}
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Task Description</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description" name="description" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true">{{model.description}}</textarea>
+                            </div>
+                        </div>
+                         <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Head Remark </label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description1" name="description1" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true" >{{model.description1}}</textarea>
+                            </div>
+                        </div>
+                         <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">RND Remark</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description2" name="description2" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" readonly="true">{{model.description2}}</textarea>
+                            </div>
+                        </div>
+                        {% else %} 
+                         <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Task Description</label>
+                            <div class="col-xs-9">
+                                <textarea class="form-control" id="description" name="description" value="" style="margin-top: 0px; margin-bottom: 0px; height: 120px;" >{{model.description}}</textarea>
+                            </div>
+                        </div>
+                         
+                         {% endif %} 
+
+                        <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label">Remark</label>
+                            <div class="col-xs-9">
+                                <textarea  class="form-control"  name="remark" value="" style="margin-top: 0px; margin-bottom: 0px; height: 100px;">{{model.remark}}</textarea>                          
+                            </div>
+                        </div>
+
+                       
+                        
+                    <div class="form-group form-group-sm"> 
+                        {% if request.user.is_approver or model.requser.id == request.user.id or model.requser.id == ''%} <!-- or model.requser.assign== request.user.id-->
+                            <div class="col-xs-4 col-xs-offset-2">
+                                <button class="btn btn-success btn-submit" type="submit">Submit</button>
+                            </div>
+                        {% elif model.assignto == request.user.email%}
+                        <div class="col-xs-4 col-xs-offset-2">
+                                <button class="btn btn-success btn-submit" type="submit">Submit</button>
+                            </div>
+                        {% else %} 
+
+
+                        </div>                       
+                        {% endif %}
+                    </div>
+                </form>
+
+                {% if model.id > 0 and model.reqstatus < 6%}    
+                <form class="form-horizontal" action="{% url 'uploadedit' model.id  %}" method="post" enctype="multipart/form-data" target="frm">
+                    {% if request.user.is_approver or model.requser.id == request.user.id or model.requser.id == ''%} 
+                        {% csrf_token %}
+                    <input type="hidden" value="{{model.id}}" />
+                    <div class="form-group form-group-sm">
+                        <label class="col-xs-2 control-label">Upload File</label>                     
+
+                        <div class="col-xs-6">
+                            <input type="file" name="file" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <div class="col-xs-6 col-xs-offset-2">
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </div>
+                    </div>
+                     {% endif %}
+                </form>
+                           
+                  <div class="form-group form-group-sm">
+                            <label class="col-xs-2 control-label"></label> 
+                           
+                            <div class="col-xs-10">         
+                            <iframe name="frm" style="width: 45%; height: 100px; border: 0" src="{% url 'uploadeditlist' model.id %}"></iframe>
+                            {% elif model.reqstatus == 0 %}
+                            <form class="form-horizontal" action="{% url 'uploadcreate' %}" method="post" enctype="multipart/form-data" target="frm">
+                                {% if request.user.is_approver or model.requser.id == request.user.id or model.requser.id == ''%} 
+
+                                {% csrf_token %}
+                                <div class="form-group form-group-sm">
+                                    <label class="col-xs-2 control-label">Upload File</label>
+
+                                    <div class="col-xs-6">
+                                        <input type="file" name="file" />
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <div class="col-xs-6 col-xs-offset-2">
+                                        <button type="submit" class="btn btn-primary">Upload</button>
+                                    </div>
+                                </div>
+                                 {% endif %}
+                            </form>
+                                 </div>
+                       <div class="col-xs-4"> 
+                        <iframe name="frm" style="width: 150%; height: 110px; border: 0" src="{% url 'uploadcreatelist'  %}"></iframe>
+                    
+                            {% elif model.reqstatus == 6 %} 
+
+                                <div class="form-group form-group-sm">
+
+                        <label class="col-xs-2 control-label">Uploaded File :</label>
+                            <iframe name="frm" style="width: 45%; height: 100px; border: 0" src="{% url 'uploadeditlist' model.id %}"></iframe>
+                            <form class="form-horizontal" action="{% url 'uploadcreate' %}" method="post" enctype="multipart/form-data" target="frm">
+                                {% csrf_token %}
+                                
+                                
+                            </form>
+                            </div>
+                             </div>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+                        {% if model.id > 0 and model.reqstatus <= 6%}  
+                    <div class="form-group form-group-sm">                       
+
+                       <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab1default" data-toggle="tab">History</a></li>
+                            <li><a href="#tab2default" data-toggle="tab">Comment</a></li>
+                           
+                        </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="tab1default"><iframe name="frm" style="width: 95%; height:300px; border: 0" src="{% url 'history' model.app.id %}"></iframe></div>
+                        <div class="tab-pane fade" id="tab2default">No Comment</div> <!--<iframe name="here" style="width: 75%; height:300px; border: 0" src="{% url 'comment' model.app.id %}"></iframe>
+                     
+                              <form class="form-horizontal" action="{% url 'createcomment' model.app.id %}" method="post" enctype="multipart/form-data"  target="here" >
+                               {% csrf_token %}
+                                <input type="hidden" name="appsid" value="{{model.app.id}}" />
+                                <input type="hidden" name="email" value="{{request.user.email}}" />
+                                       
+                              <div class="col-xs-6">
+                                    <textarea  class="form-control"  name="comment" value="" style="margin-top: 0px; margin-bottom: 0px; height: 70px;"></textarea>                          
+                                </div>
+                                    
+                                <div class="col-xs-2 ">
+                                    <button class="btn btn-success btn-submit" type="submit">Comment</button>
+                               </div>
+                          </form>-->
+                </div>
+                     {% endif %}
+                </div> 
+</div>
+{% endblock %}
