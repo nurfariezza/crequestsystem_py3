@@ -1,0 +1,5 @@
+======System upgrade Log======
+
+2018-07-10 :Manually send email to requestor to notify them to verified all the request.
+
+2018-07-10 : Ming Ching request to add auto verified function. Any request which completed date is more than 60 days, will be auto verified by system.
